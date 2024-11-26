@@ -1,0 +1,81 @@
+@startuml
+left to right direction
+
+:Unregistered User: as a
+:Registered User: as u
+:Emergency Workforce: as w
+:Emergency Organisations: as org
+:Administrators: as su
+
+package System {
+package Front_End {
+
+usecase "View Map with data"
+usecase "View Historical Map with data"
+usecase Report as "Report
+---
+Add Personal Data if not logged in"
+usecase "Add Task"
+usecase "Register"
+usecase "View Map with Tasks"
+usecase "View Tasks"
+usecase "Complete Task"
+usecase "Manage and Delegate Tasks"
+usecase "Create Workforce Account"
+usecase "Change Authority Level of Account"
+usecase "View Reports"
+
+(Report) .> (Add Task) : Optional
+}
+
+package Back_End {
+usecase "Access national water level data"
+usecase "Access historical data"
+usecase "Access Report data"
+usecase "Add User to DB"
+usecase "Modify User Data"
+usecase "Add Report to DB"
+usecase "Add Task to DB"
+usecase "Access User Data"
+usecase "Modify Task"
+usecase "Access Tasks"
+}
+
+"Access User Data" ..> "Add User to DB" : "Extends. Pass if user not found"
+"Register" --> "Access User Data"
+"View Map with data" --> "Access national water level data"
+"View Historical Map with data" --> "Access historical data"
+"Report" --> "Add Report to DB"
+"Add Task" --> "Add Task to DB"
+"Complete Task" --> "Modify Task"
+"Create Workforce Account" --> "Access User Data"
+"Change Authority Level of Account"--> "Modify User Data"
+"Manage and Delegate Tasks" --> "Modify Task"
+"View Tasks" --> "Access Tasks"
+"View Reports" --> "Access Report data"
+"View Map with Tasks" ---> "Access Tasks"
+}
+
+a ---> (Register)
+a ---> (View Map with data)
+a ---> (View Historical Map with data)
+a ---> (Report)
+
+u ---> (View Map with data)
+u ---> (View Historical Map with data)
+u ---> (Report)
+
+w ---> (View Map with Tasks)
+w ---> (View Reports)
+w ---> (View Tasks)
+w ---> (Complete Task)
+
+org ---> (View Map with Tasks)
+org ---> (View Reports)
+org ---> (View Tasks)
+org ---> (Manage and Delegate Tasks)
+org ---> (Create Workforce Account)
+
+su ---> (Change Authority Level of Account)
+
+@enduml

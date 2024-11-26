@@ -1,0 +1,34 @@
+#+title: Sprintoutcomes
+
+* Sprint 2 [0/7]
+[??] - [28.11]
+** TODO DB
+** TODO Backend init
+** TODO Frontend init
+** TODO Login & Register
+** TODO Create Report
+** TODO Map View
+** TODO Integrate Map & Reports
+
+
+* Front end additions
+| URI    | Method | Status | Args | Notes |
+|--------+--------+--------+------+-------|
+| /      | GET    | TODO   |      |       |
+| /map   | GET    | TODO   |      |       |
+| /about | GET    | TODO   |      |       |
+|        |        |        |      |       |
+
+* Back end additions
+| URI             | Method | Status | T | Args              | Notes                                                    |
+|-----------------+--------+--------+---+-------------------+----------------------------------------------------------|
+| /api            | GET    | TODO   |   | -                 | Return all current api endpoints & capabilities          |
+| /api/auth       | GET    | TODO   |   | uname, pass_hash  | Login                                                    |
+|                 | POST   | TODO   |   | user_model        | Register                                                 |
+| /api/auth/uname | GET    | TODO   |   |                   | MUST BE LOGGED IN! gets user data                        |
+|                 | POST   | TODO   |   | user_model        | MUST BE LOGGED IN! updates some user data (non key data) |
+| /api/reports    | GET    | TODO   |   | -                 | Returns json list of simplified reports                  |
+|                 | POST   | TODO   |   | report_model      |                                                          |
+| /api/map        | GET    | TODO   |   | point, map_filter | Returns data for map visualisation                       |
+|                 |        |        |   |                   |                                                          |
+|                 |        |        |   |                   |                                                          |

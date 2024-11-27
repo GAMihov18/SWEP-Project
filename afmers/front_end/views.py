@@ -8,7 +8,7 @@ from front_end.forms import AccountCreationForm
 
 
 def home(request):
-    return render(request, "base.html")
+    return render(request, "Home.html")
 
 
 def register(request):
@@ -22,3 +22,7 @@ def register(request):
 
 
 login = LoginView.as_view(template_name="Login.html")
+
+
+def map(request):
+    return render(request, "map.html")

@@ -81,6 +81,9 @@ class Report(BaseModel):
     )
     has_task = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.title
+
 
 class Task(BaseModel):
     """
@@ -97,3 +100,6 @@ class Task(BaseModel):
     status = models.CharField(
         max_length=1, choices=STATUS_OPTIONS, default="N", blank=False
     )
+
+    def __str__(self):
+        return self.title

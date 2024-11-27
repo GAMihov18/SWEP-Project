@@ -24,8 +24,10 @@ import api.views as api
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
     path("api/", api.root),
     path("api/reports", api.reports),
+
     path("", fe.home, name="home-page"),
     path("login/", fe.login, name="login-page"),
     path("register/", fe.register, name="register-page"),

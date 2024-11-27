@@ -29,4 +29,5 @@ urlpatterns = [
     path("", fe.home, name="home-page"),
     path("login/", fe.login, name="login-page"),
     path("register/", fe.register, name="register-page"),
+    path("map/", fe.map)
 ]

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "front_end"
+    "api",
+    "front_end",
 ]
 
 MIDDLEWARE = [
@@ -85,6 +86,7 @@ DATABASES = {
 
 
 # Password validation
+
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -130,3 +132,6 @@ REGISTER_REDIRECT_URL = "home-page"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "api.Account"
+

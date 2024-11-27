@@ -6,6 +6,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
+
+    {% include "Header.html" %}
+    {% block class-navActiveMap%}active{% endblock %}
+
 <div id="map" style="height: 500px; width: 100%;"></div>
 <script>
     // Initialize the map, centered on Austria

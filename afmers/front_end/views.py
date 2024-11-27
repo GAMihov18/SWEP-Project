@@ -8,7 +8,7 @@ from front_end.forms import AccountCreationForm
 
 
 def home(request):
-    return render(request, "base.html")
+    return render(request, "Home.html")
 
 
 def register(request):

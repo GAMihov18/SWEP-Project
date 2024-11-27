@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import pprint
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "front_end"
 ]
 
 MIDDLEWARE = [
@@ -54,7 +57,7 @@ ROOT_URLCONF = "afmers.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -66,7 +69,7 @@ TEMPLATES = [
         },
     },
 ]
-
+pprint.pprint([os.path.abspath(template) for template in TEMPLATES[0]['DIRS']])
 WSGI_APPLICATION = "afmers.wsgi.application"
 
 
@@ -118,7 +121,10 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 TEMPLATES_DIR = [BASE_DIR / "templates"]
-
+LOGOUT_REDIRECT_URL = "home-page"
+LOGIN_REDIRECT_URL = "home-page"
+LOGIN_URL = "login-page"
+REGISTER_REDIRECT_URL = "home-page"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

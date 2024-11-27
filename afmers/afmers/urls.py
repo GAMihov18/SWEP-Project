@@ -18,6 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+import front_end.views as fe
+import api.views as api
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/", api.root),
+    path("api/auth/login", api.login),
+    path("api/auth/register", api.register),
+    path("api/reports", api.reports),
 ]

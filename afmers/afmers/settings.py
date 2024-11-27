@@ -129,3 +129,20 @@ TEMPLATES_DIR = [BASE_DIR / "templates"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "api.Account"
+
+
+# Session engine (store session data in the database)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# Set the session cookie name
+SESSION_COOKIE_NAME = "sessionid"
+
+# Secure cookie settings for better security (use HTTPS)
+SESSION_COOKIE_SECURE = True  # Set to True for HTTPS
+CSRF_COOKIE_SECURE = True  # Set to True for HTTPS
+
+# SameSite settings to enhance security (prevents cross-site request forgery)
+SESSION_COOKIE_SAMESITE = "Lax"  # or 'Strict'
+
+# Set session timeout (e.g., 5 minutes)
+SESSION_COOKIE_AGE = 60 * 5  # 5 minutes

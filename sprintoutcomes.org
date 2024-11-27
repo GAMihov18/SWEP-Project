@@ -23,7 +23,7 @@
 | URI             | Method | Status | T | Args              | Notes                                                    |
 |-----------------+--------+--------+---+-------------------+----------------------------------------------------------|
 | /api            | GET    | TODO   |   | -                 | Return all current api endpoints & capabilities          |
-| /api/auth       | GET    | TODO   |   | uname, pass_hash  | Login                                                    |
+| /api/auth       | GET    | TODO   |   | uname, pass_hash  | Login (returns true/false?)                               |
 |                 | POST   | TODO   |   | user_model        | Register                                                 |
 | /api/auth/uname | GET    | TODO   |   | -                 | MUST BE LOGGED IN! gets user data                        |
 |                 | POST   | TODO   |   | user_model        | MUST BE LOGGED IN! updates some user data (non key data) |

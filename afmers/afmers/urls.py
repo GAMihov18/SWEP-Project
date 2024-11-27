@@ -18,7 +18,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from front_end import views
 
 import front_end.views as fe
 import api.views as api
@@ -27,7 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", api.root),
     path("api/reports", api.reports),
-    path("", views.Home, name="home-page"),
-    path("login/", LoginView.as_view(template_name="Login.html"), name="login-page"),
-    path("register/", views.register, name="register-page"),
+    path("", fe.home, name="home-page"),
+    path("login/", fe.login, name="login-page"),
+    path("register/", fe.register, name="register-page"),
 ]

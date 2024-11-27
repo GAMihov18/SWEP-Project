@@ -43,7 +43,7 @@ class BaseModel(models.Model):
 
 class Account(AbstractUser, BaseModel):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
+    address = models.CharField(max_length=300, blank=True, null=True)
     # authority_level
 
     def __str__(self):

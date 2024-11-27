@@ -26,8 +26,6 @@ import api.views as api
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", api.root),
-    path("api/auth/login", api.login),
-    path("api/auth/register", api.register),
     path("api/reports", api.reports),
     path("", views.Home, name="home-page"),
     path("login/", LoginView.as_view(template_name="Login.html"), name="login-page"),

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.serializers import serialize
+from django.utils.timezone import now
 import uuid
 import json
 
@@ -99,7 +100,7 @@ V: Voided
 class Report(BaseModel):
     """
     api.models.Report(BaseModel)
-        user_id -> ForeignKey
+        account -> ForeignKey
         title -> CharField
         descirption -> CharField
         date_reported -> DateField
@@ -108,10 +109,10 @@ class Report(BaseModel):
         has_task -> BooleanField
     """
 
-    reporter_account = models.ForeignKey("api.Account", on_delete=models.CASCADE)
+    account = models.ForeignKey("api.Account", on_delete=models.CASCADE)
     title = models.CharField(max_length=100, blank=False)
-    descirption = models.CharField(max_length=300, blank=True)
-    date_reported = models.DateField(blank=False)
+    description = models.CharField(max_length=300, blank=True)
+    date_reported = models.DateField(blank=False, default=now)
     time_reported = models.TimeField(blank=True, null=True)
     status = models.CharField(
         max_length=1, choices=STATUS_OPTIONS, default="N", blank=False
@@ -126,7 +127,7 @@ class Report(BaseModel):
         data = super().to_json()
         data.update(
             {
-                "account_id": str(self.account_id.id),
+                "account": str(self.account_id.id),
                 "title": self.title,
                 "descirption": self.descirption,
                 "date_reported": str(self.date_reported),
@@ -143,8 +144,8 @@ class Report(BaseModel):
     def from_json(cls, json_data):
         """Override from_json to parse Report-specific fields."""
         data = json.loads(json_data)
-        data["account_id"] = Account.objects.get(
-            id=data["account_id"]
+        data["account"] = Account.objects.get(
+            id=data["account"]
         )  # Ensure we resolve the ForeignKey
         data["date_reported"] = data.get("date_reported", None)
         return cls(**data)
@@ -153,13 +154,13 @@ class Report(BaseModel):
 class Task(BaseModel):
     """
     api.models.Task(BaseModel)
-        report_id -> ForeignKey
+        report -> ForeignKey
         title -> CharField
         descirption -> CharField
         status -> CharField
     """
 
-    report_owner = models.ForeignKey(to=Report, on_delete=models.CASCADE)
+    report = models.ForeignKey(to=Report, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, blank=False)
     descirption = models.CharField(max_length=300, blank=True)
     status = models.CharField(
@@ -174,7 +175,7 @@ class Task(BaseModel):
         data = super().to_json()
         data.update(
             {
-                "report_id": str(self.report_id.id),
+                "report": str(self.report.id),
                 "title": self.title,
                 "descirption": self.descirption,
                 "status": self.status,
@@ -186,7 +187,5 @@ class Task(BaseModel):
     def from_json(cls, json_data):
         """Override from_json to parse Task-specific fields."""
         data = json.loads(json_data)
-        data["report_id"] = Report.objects.get(
-            id=data["report_id"]
-        )  # Resolve ForeignKey
+        data["report"] = Report.objects.get(id=data["report"])  # Resolve ForeignKey
         return cls(**data)

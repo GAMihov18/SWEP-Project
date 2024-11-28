@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+
+    <title>Reports</title>
+</head>
+<body>
+    {% include "Header.html" %}
+    {% block class-navActiveReports%}active{% endblock %}
+
+    <h1>Reports</h1>
+    <ul>
+        {% for report in reports %}
+            <li>
+                <strong>{{ report.title }}</strong><br>
+                Reporter: {{ report.account.username }}<br>
+                Date Reported: {{ report.date_reported }}<br>
+                Description: {{ report.description }}
+            </li>
+        {% empty %}
+            <li>No reports available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

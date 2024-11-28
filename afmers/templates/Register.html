@@ -26,16 +26,19 @@
             <br>
         </div>
     </div>
-    <div class="row row-cols-1">
-        <div class="col">
-            <form method="post">
-                <br>
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button class="btn btn-dark" type="submit">Register</button>
-            </form>
-            <br>
-            <p><button class="btn btn-dark"><a href="http://localhost:8000/" style="color: white; text-decoration: none;">Back to Home</a></button></p>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-10">
+                <form method="post" class="p-4 border rounded bg-light shadow-sm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                    </div>
+                    <button class="btn btn-dark" type="submit">Register</button>
+                    <p></p>
+                    <p><button class="btn btn-secondary"><a href="http://localhost:8000/" style="color: white; text-decoration: none;">Back to Home</a></button></p>
+                </form>
+            </div>
         </div>
     </div>
 </div>

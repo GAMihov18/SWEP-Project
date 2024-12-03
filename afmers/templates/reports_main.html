@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +10,31 @@
 <body>
     {% include "Header.html" %}
 
-    <h1>Reports</h1>
-    <ul>
-        {% for report in reports %}
-            <li>
-                <strong>{{ report.title }}</strong><br>
-                Reporter: {{ report.account.username }}<br>
-                Date Reported: {{ report.date_reported }}<br>
-                Description: {{ report.description }}
-            </li>
-        {% empty %}
-            <li>No reports available.</li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Reports</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if reports %}
+                    {% for report in reports %}
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ report.title }}</h5>
+                                <p class="card-text">
+                                    <strong>Reporter:</strong> {{ report.account.username }}<br>
+                                    <strong>Date Reported:</strong> {{ report.date_reported|date:"dd/mm/yy" }}<br>
+                                    <strong>Description:</strong> {{ report.description }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-secondary text-center" role="alert">
+                        No reports available.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>

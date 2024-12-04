@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from front_end.forms import AccountCreationForm
+from front_end.forms import AccountCreationForm, ReportForm
 from api.controllers import *
 
 # Create your views here.
@@ -32,3 +32,16 @@ def map(request):
 def reports(request):
     context = {"reports": ReportService.all()}
     return render(request, "reports_main.html", context=context)
+
+
+def create_report(request):
+    form = ReportForm(request.POST)
+    if form.is_valid():
+        report = form.save(commit=False)
+        report.account = request.user
+        report.save()
+        return redirect("/")
+    else:
+        form = ReportForm()
+    return render(request, "Create_Report.html", {"form": form})
+

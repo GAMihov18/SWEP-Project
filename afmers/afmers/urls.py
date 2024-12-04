@@ -21,6 +21,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 import front_end.views as fe
 import api.views as api
+import afmers.settings as settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,7 +29,9 @@ urlpatterns = [
     path("api/reports", api.reports),
     path("", fe.home, name="home-page"),
     path("login/", fe.login, name="login-page"),
+    path("logout/", LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL), name="logout-page"),
     path("register/", fe.register, name="register-page"),
     path("map/", fe.map),
     path("reports/", fe.reports),
+    path("create_report", fe.create_report)
 ]

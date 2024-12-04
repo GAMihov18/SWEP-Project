@@ -8,6 +8,10 @@
         <a class="nav-link" href="http://127.0.0.1:8000/reports/">Reports</a>
         <a class="nav-link" href="http://127.0.0.1:8000/login/">Login</a>
         <a class="nav-link" href="http://127.0.0.1:8000/register/">Register</a>
+          {% if user.is_authenticated %}
+          <a class="nav-link" href="http://127.0.0.1:8000/create_report">Report an Emergency</a>
+          <a class="nav-link" href="#" onclick="document.getElementById('logout-modal').style.display='block'; return false;">Logout</a>
+          {% endif %}
       </div>
     </div>
   </div>

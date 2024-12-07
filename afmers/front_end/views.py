@@ -4,12 +4,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from front_end.forms import AccountCreationForm, ReportForm
 from api.controllers import *
-
+from api.models import Report
 # Create your views here.
 
 
 def home(request):
-    return render(request, "Home.html")
+    reports = Report.objects.all()[::-1][:5]
+    return render(request, "Home.html", {'reports': reports})
 
 
 def register(request):

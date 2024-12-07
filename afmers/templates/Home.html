@@ -54,9 +54,10 @@
                     <div class="card-body">
                         <ul class="list-group">
                             {% if reports %}
-                                {% for report in reports|slice:":5" %}
-                                    <div class="reports-item">
+                                {% for report in reports %}
+                                    <div class="card reports-item mb-2 px-2">
                                         <h5>{{ report.title }}</h5>
+                                        <samp class="text-secondary"> {{ report.date_reported }}</samp>
                                         <p>{{ report.description }}</p>
                                     </div>
                                 {% endfor %}
@@ -83,7 +84,7 @@
             <button class="btn btn-secondary" onclick="document.getElementById('logout-modal').style.display='none';">Cancel</button>
         </div>
     </div>
-    
+<br>
 <footer class="footer bg-dark text-white mt-auto py-3">
     <p>&reg; Austrian Flood Monitoring System</p>
 </footer>

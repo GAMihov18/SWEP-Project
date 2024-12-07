@@ -31,7 +31,7 @@ def map(request):
 
 
 def reports(request):
-    context = {"reports": ReportService.all()}
+    context = {"reports": ReportService.all()[::-1]}
     return render(request, "reports_main.html", context=context)
 
 

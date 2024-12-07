@@ -33,5 +33,5 @@ urlpatterns = [
     path("register/", fe.register, name="register-page"),
     path("map/", fe.map, name="map-page"),
     path("reports/", fe.reports, name="reports-page"),
-    path("create_report", fe.create_report, name="create_report-page")
+    path("create_report/", fe.create_report, name="create_report-page"),
 ]

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <title>AFMERS</title>
     <style>
         body {
@@ -20,10 +21,10 @@
 <body>
     {% include "Header.html" %}
     {% include "logout.html" %}
-    
+
     <div class="container-fluid mt-3 mb-2 bg-dark text-white text-center py-4 banner">
         <h2>Welcome to <strong>AFMERS</strong>, the Austrian Flood Monitoring and Emergency Response System</h2>
-        <h4><samp class="text-center text-primary text-lg">*** Report and stay informed ***</samp></h4>
+        <h4><samp class="text-center text-danger text-lg">*** Report and stay informed ***</samp></h4>
     </div>
 
     <div class="container mt-4">
@@ -75,6 +76,6 @@
 <footer class="footer bg-dark text-white mt-auto py-3">
     <p>&reg; Austrian Flood Monitoring System</p>
 </footer>
-
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

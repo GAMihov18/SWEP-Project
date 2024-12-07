@@ -5,27 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/bootstrap.css">
     <title>AFMERS</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
     {% include "Header.html" %}
-
-
-    <div class="map-container">
-        asdasd
+    
+    <div class="container-fluid mt-3 mb-2 bg-dark text-white text-center py-4 banner">
+        <h2>Welcome to <strong>AFMERS</strong>, the Austrian Flood Monitoring and Emergency Response System</h2>
+        <h3 class="text-center text-danger">Report and stay informed</h3>
     </div>
-    <div class="report-container">
-        asdasdasd
+
+    <div class="container mt-4">
+        <div class="row">
+
+           
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header"><h4><strong>News</strong></h4></div>
+                    <div class="card-body">
+                        {% if news %}
+                            {% for info in news %}
+                                <div class="news-item">
+                                    <h5>{{ info.title }}</h5>
+                                    <p>{{ info.description }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No current news available</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>            
+        
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h4><strong>Latest Reports</strong></h4></div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% if reports %}
+                                {% for report in reports|slice:":5" %}
+                                    <div class="reports-item">
+                                        <h5>{{ report.title }}</h5>
+                                        <p>{{ report.description }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>No reports available</p>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    
+    
     <div id="logout-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
-    <div style="background: white; width: 300px; margin: 15% auto; padding: 20px; border-radius: 5px; text-align: center;">
-        <h4>Are you sure you want to logout?</h4>
-        <form action="{% url 'logout-page' %}" method="post" style="margin-top: 20px;">
-            {% csrf_token %}
-            <button class="btn btn-dark" type="submit">Logout</button>
-            <p></p>
-        </form>
-        <button class="btn btn-secondary" onclick="document.getElementById('logout-modal').style.display='none';">Cancel</button>
+        <div style="background: white; width: 300px; margin: 15% auto; padding: 20px; border-radius: 5px; text-align: center;">
+            <h4>Are you sure you want to logout?</h4>
+            <form action="{% url 'logout-page' %}" method="post" style="margin-top: 20px;">
+                {% csrf_token %}
+                <button class="btn btn-dark" type="submit">Logout</button>
+                <p></p>
+            </form>
+            <button class="btn btn-secondary" onclick="document.getElementById('logout-modal').style.display='none';">Cancel</button>
+        </div>
     </div>
-</div>
+    
+<footer class="footer bg-dark text-white mt-auto py-3">
+    <p>&reg; Austrian Flood Monitoring System</p>
+</footer>
+
 </body>
 </html>

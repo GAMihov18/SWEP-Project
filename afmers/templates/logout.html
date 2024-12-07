@@ -1,0 +1,12 @@
+<div id="logout-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+    <div style="background: white; width: 300px; margin: 15% auto; padding: 20px; border-radius: 5px; text-align: center;">
+        <h4>Are you sure you want to logout?</h4>
+        <form action="{% url 'logout-page' %}" method="post" style="margin-top: 20px;">
+            {% csrf_token %}
+            <button class="btn btn-dark" type="submit">Logout</button>
+            <p></p>
+        </form>
+        <button class="btn btn-secondary" onclick="document.getElementById('logout-modal').style.display='none';">Cancel</button>
+    </div>
+</div>
+

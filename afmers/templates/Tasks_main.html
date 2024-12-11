@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <title>Tasks</title>
+</head>
+<body>
+    {% include "Header.html" %}
+    {% include "logout.html" %}
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Tasks</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if tasks %}
+                    {% for task in tasks %}
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ task.title }}</h5>
+                                <p class="card-text">
+                                    <strong>Description:</strong> {{ task.descirption }}<br>
+                                    <strong>Status:</strong> {{ task.status }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-secondary text-center" role="alert">
+                        No tasks available for this report.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

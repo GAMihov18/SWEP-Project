@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from front_end.forms import AccountCreationForm, ReportForm, TaskForm
 from api.controllers import *
-from api.models import Report
+from api.models import Report, Task
 # Create your views here.
 
 
@@ -66,3 +66,7 @@ def create_task(request, pk):
     return render(request, "Create_Task.html", {"form": form})
 
 
+def tasks(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+    tasks = Task.objects.filter(report=report)
+    return render(request, 'Tasks_main.html', {"tasks": tasks})

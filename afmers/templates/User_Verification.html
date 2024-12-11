@@ -16,23 +16,21 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                {% if reports %}
-                    {% for report in reports %}
+                {% if unverified_users %}
+                    {% for user in unverified_users %}
                         <div class="card mb-4 shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">{{ report.title }}</h5>
+                                <h5 class="card-title">{{ user.username }}</h5>
                                 <p class="card-text">
-                                    <strong>Reporter:</strong> {{ report.account.username }}<br>
-                                    <strong>Date Reported:</strong> {{ report.date_reported }}<br>
-                                    <strong>Description:</strong> {{ report.description }}
+                                    <strong>Role:</strong> {{ user.role }}
                                 </p>
-                                <a href="{% url 'create_task-page' report.id %}"><button class="btn btn-dark" type="submit">Add a Task</button></a>
+                                <a href="{% url 'create_task-page' report.id %}"><button class="btn btn-dark" type="submit">Verify User</button></a>
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
                     <div class="alert alert-secondary text-center" role="alert">
-                        No reports available.
+                        No unverified new users.
                     </div>
                 {% endif %}
             </div>

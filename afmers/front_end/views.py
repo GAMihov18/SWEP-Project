@@ -48,7 +48,8 @@ login = LoginView.as_view(template_name="Login.html")
 
 
 def map(request):
-    return render(request, "map.html")
+    reports = Report.objects.all()
+    return render(request, "map.html", {"reports": reports})
 
 
 def reports(request):

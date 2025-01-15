@@ -21,56 +21,13 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // GeoJSON data for flooded areas
-    var floodData = {
-        "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [
-                        [
-                            [14.0, 47.5], [14.5, 47.5], [14.5, 47.8], [14.0, 47.8], [14.0, 47.5]
-                        ]
-                    ]
-                },
-                "properties": {
-                    "name": "Flooded Area 1"
-                }
-            },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [
-                        [
-                            [14.7, 48.0], [15.0, 48.0], [15.0, 48.3], [14.7, 48.3], [14.7, 48.0]
-                        ]
-                    ]
-                },
-                "properties": {
-                    "name": "Flooded Area 2"
-                }
-            }
-        ]
-    };
-
-    // Style for flooded areas
-    var floodStyle = {
-        color: "blue",
-        weight: 2,
-        fillColor: "blue",
-        fillOpacity: 0.5
-    };
-
-    // Add the GeoJSON layer to the map
-    L.geoJSON(floodData, {
-        style: floodStyle,
-        onEachFeature: function (feature, layer) {
-            layer.bindPopup("Flooded Area: " + feature.properties.name);
-        }
-    }).addTo(map);
+    // Add markers for each report
+    {% for report in reports %}
+        {% if report.latitude and report.longitude %}
+            var marker = L.marker([{{ report.latitude }}, {{ report.longitude }}]).addTo(map);
+            marker.bindPopup("<b>{{ report.title }}</b><br>{{ report.description }}");
+        {% endif %}
+    {% endfor %}
 </script>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>

@@ -15,6 +15,7 @@ class AccountCreationForm(UserCreationForm):
             "address",
             "password1",
             "password2",
+            "authority_level"
         )
 
     def __init__(self, *args, **kwargs):
@@ -28,6 +29,7 @@ class AccountCreationForm(UserCreationForm):
             {"placeholder": "Enter phone number"}
         )
         self.fields["address"].widget.attrs.update({"placeholder": "Enter address"})
+        self.fields["authority_level"].widget.attrs.update({"placeholder": "select authority type"})
 
 
 class ReportForm(forms.ModelForm):
@@ -56,6 +58,11 @@ class TaskForm(forms.ModelForm):
         widgets = {
             "descirption": forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 300px;'}),
         }
+
+    username = forms.ModelChoiceField(
+        queryset=Account.objects.filter(authority_level='E'),
+        empty_label="Select a user",
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

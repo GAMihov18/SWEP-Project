@@ -28,11 +28,12 @@
                                     <strong>Date Reported:</strong> {{ report.date_reported }}<br>
                                     <strong>Description:</strong> {{ report.description }}
                                 </p>
-                                <!-- these buttons should be visible only by organizations members -->
+                                {% if user.authority_level == "O" %}
                                 <a href="{% url 'create_task-page' report.id %}"><button class="btn btn-dark" type="submit">Add a Task</button></a>
                                 <a href="{% url 'report_tasks-page' report.id %}"><button class="btn btn-dark" type="submit">See Tasks</button></a>
                                 <a href="{% url 'delete_report-page' report.id %}"><button class="btn btn-dark" type="submit">Delete Report</button></a>
                                 <a href="{% url 'update_report-page' report.id %}"><button class="btn btn-dark" type="submit">Update Report</button></a>
+                                {% endif %}
                             </div>
                         </div>
                         {% endif %}

@@ -23,7 +23,7 @@ def register(request):
         account.is_active = True
         account.is_deleted = False
         account.save()
-        return redirect("/")
+        return redirect("/login")
     else:
         print(form.errors)
         # form = AccountCreationForm()

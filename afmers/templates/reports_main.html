@@ -19,6 +19,7 @@
             <div class="col-md-8">
                 {% if reports %}
                     {% for report in reports %}
+                        {% if not report.is_deleted %}
                         <div class="card mb-4 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">{{ report.title }}</h5>
@@ -27,10 +28,14 @@
                                     <strong>Date Reported:</strong> {{ report.date_reported }}<br>
                                     <strong>Description:</strong> {{ report.description }}
                                 </p>
+                                <!-- these buttons should be visible only by organizations members -->
                                 <a href="{% url 'create_task-page' report.id %}"><button class="btn btn-dark" type="submit">Add a Task</button></a>
                                 <a href="{% url 'report_tasks-page' report.id %}"><button class="btn btn-dark" type="submit">See Tasks</button></a>
+                                <a href="{% url 'delete_report-page' report.id %}"><button class="btn btn-dark" type="submit">Delete Report</button></a>
+                                <a href="{% url 'update_report-page' report.id %}"><button class="btn btn-dark" type="submit">Update Report</button></a>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <div class="alert alert-secondary text-center" role="alert">

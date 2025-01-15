@@ -19,6 +19,7 @@
             <div class="col-md-8">
                 {% if tasks %}
                     {% for task in tasks %}
+                        {% if not task.is_deleted %}
                         <div class="card mb-4 shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">{{ task.title }}</h5>
@@ -26,8 +27,15 @@
                                     <strong>Description:</strong> {{ task.descirption }}<br>
                                     <strong>Status:</strong> {{ task.status }}
                                 </p>
+                                {% if task.username == user %}
+                                <a href="{% url 'update_task_status-page' task.id %}"><button class="btn btn-dark" type="submit">Update Task Status</button></a>
+                                {% endif %}
+                                <!-- The followings should be visible only by organizations -->
+                                <a href="{% url 'delete_task-page' task.id %}"><button class="btn btn-dark" type="submit">Delete Task</button></a>
+                                <a href="{% url 'update_task-page' task.id %}"><button class="btn btn-dark" type="submit">Update Task</button></a>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <div class="alert alert-secondary text-center" role="alert">

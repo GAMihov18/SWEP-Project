@@ -49,7 +49,9 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ("title",
-                  "descirption"
+                  "descirption",
+                  "username",
+                  "status"
                   )
         widgets = {
             "descirption": forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 300px;'}),
@@ -59,3 +61,9 @@ class TaskForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["title"].widget.attrs.update({"placeholder": "Enter a title"})
         self.fields["descirption"].widget.attrs.update({"placeholder": "Description"})
+        self.fields["username"].widget.attrs.update({"placeholder": "Enter the username of the person this task is to be assigned to"})
+
+class UpdateTaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('status',)

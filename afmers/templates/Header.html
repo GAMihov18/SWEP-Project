@@ -15,15 +15,20 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'reports-page' %}">Reports</a>
         </li>
+        {% if not user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login-page' %}">Login</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register-page' %}">Register</a>
         </li>
+        {% endif %}
         {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'create_report-page' %}">Report an Emergency</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'assigned_task-page' user.username %}">See assigned tasks</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" onclick="document.getElementById('logout-modal').style.display='block'; return false;">Logout</a>

@@ -159,7 +159,7 @@ class Task(BaseModel):
         descirption -> CharField
         status -> CharField
     """
-
+    username = models.ForeignKey(to=Account, to_field="username", on_delete=models.CASCADE, null=True)
     report = models.ForeignKey(to=Report, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, blank=False)
     descirption = models.CharField(max_length=300, blank=True)

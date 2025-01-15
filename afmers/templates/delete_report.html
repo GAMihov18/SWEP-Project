@@ -1,0 +1,13 @@
+<div id="delete_report-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+    <div style="background: white; width: 300px; margin: 15% auto; padding: 20px; border-radius: 5px; text-align: center;">
+        {% for report in reports %}
+        <h4>Are you sure you want to delete this report?</h4>
+        <form action="{% url 'delete_report-page' report.id %}" method="post" style="margin-top: 20px;">
+            {% csrf_token %}
+            <button class="btn btn-dark" type="submit">Delete</button>
+            <p></p>
+        </form>
+        {% endfor %}
+        <button class="btn btn-secondary" onclick="document.getElementById('delete_report-modal').style.display='none';">Cancel</button>
+    </div>
+</div>

@@ -36,4 +36,10 @@ urlpatterns = [
     path("create_report/", fe.create_report, name="create_report-page"),
     path("create_task/<str:pk>", fe.create_task, name="create_task-page"),
     path("reports/<str:pk>/tasks", fe.tasks, name='report_tasks-page'),
+    path("see_tasks/<str:pk>", fe.assigned_tasks, name='assigned_task-page'),
+    path("update_task_status/<str:pk>", fe.update_task_status, name='update_task_status-page'),
+    path("delete_task/<uuid:pk>", fe.delete_task, name='delete_task-page'),
+    path("delete_report/<uuid:pk>", fe.delete_report, name='delete_report-page'),
+    path("update_task/<uuid:pk>", fe.update_task, name="update_task-page"),
+    path("update_report/<uuid:pk>", fe.update_report, name="update_report-page")
 ]

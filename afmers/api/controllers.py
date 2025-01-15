@@ -1,217 +1,118 @@
-# services/report_service.py
-from api.models import Account, Report, Task
-
-"""
-Access data/models/classes using these classes
-"""
+from django.contrib.auth import authenticate, login, logout
+from api.models import Account, Report, Task, Request
 
 
-class AccountService:
-    """Service over Account model"""
+class BaseController:
+    """Base controller with common CRUD operations"""
 
-    @staticmethod
-    def all():
-        """Returns all accounts"""
-        return Account.objects.filter(is_deleted=False)
+    model = None  # To be set by subclasses
 
-    @staticmethod
-    def filter(*args, **kwargs):
-        """Filters accounts based on conditions"""
-        kwargs.setdefault("is_deleted", False)
-        return Account.objects.filter(*args, **kwargs)
+    @classmethod
+    def all(cls):
+        return cls.model.objects.filter(is_deleted=False)
 
-    @staticmethod
-    def get_by_id(account_id):
-        """Retrieve a single account by ID"""
-        return AccountService.filter(id=account_id).first()
+    @classmethod
+    def get_by_id(cls, obj_id):
+        return cls.model.objects.filter(id=obj_id, is_deleted=False).first()
 
-    @staticmethod
-    def create(account_data):
-        """
-        Create a new account from a dictionary or another Account object.
-        """
-        if isinstance(account_data, Account):
-            # Convert a model instance to a dictionary, excluding auto fields like id
-            account_data = {
-                field.name: getattr(account_data, field.name)
-                for field in account_data._meta.fields
-                if field.name != "id"
-            }
-        elif not isinstance(account_data, dict):
-            raise ValueError(
-                "account_data must be an Account instance or a dictionary."
-            )
+    @classmethod
+    def create(cls, data):
+        return cls.model.objects.create(**data)
 
-        # Create the new Account instance
-        return Account.objects.create(**account_data)
+    @classmethod
+    def update(cls, obj_id, data):
+        instance = cls.model.objects.filter(id=obj_id, is_deleted=False).first()
+        if instance:
+            for key, value in data.items():
+                setattr(instance, key, value)
+            instance.save()
+        return instance
+
+    @classmethod
+    def delete(cls, obj_id):
+        instance = cls.model.objects.filter(id=obj_id, is_deleted=False).first()
+        if instance:
+            instance.delete()
+        return instance
+
+
+class AccountController(BaseController):
+    """Controller for Account model with authentication methods"""
+
+    model = Account
 
     @staticmethod
-    def update(account_data):
-        """
-        Update an account from a dictionary or another Account object. Find by id.
-        """
-        if isinstance(account_data, Account):
-            account_id = account_data.id
-            updated_fields = {
-                field.name: getattr(account_data, field.name)
-                for field in account_data._meta.fields
-                if field.name != "id"
-            }
-        elif isinstance(account_data, dict) and "id" in account_data:
-            account_id = account_data["id"]
-            updated_fields = {k: v for k, v in account_data.items() if k != "id"}
-        else:
-            raise ValueError("account_data must have an 'id' field.")
-
-        # Update the Account instance
-        Account.objects.filter(id=account_id).update(**updated_fields)
-        return Account.objects.get(id=account_id)
+    def authenticate_user(username, password):
+        user = authenticate(username=username, password=password)
+        return user
 
     @staticmethod
-    def delete(account_id):
-        """Delete an account by ID"""
-        AccountService.filter(id=account_id).delete()
-
-
-class ReportService:
-    """Service over Report model"""
+    def login_user(request, user):
+        if user is not None:
+            login(request, user)
+            return True
+        return False
 
     @staticmethod
-    def all():
-        """Returns all non-deleted reports"""
-        return Report.objects.filter(is_deleted=False)
+    def logout_user(request):
+        logout(request)
 
     @staticmethod
-    def filter(*args, **kwargs):
-        """Filters non-deleted reports"""
-        kwargs.setdefault("is_deleted", False)
-        return Report.objects.filter(*args, **kwargs)
+    def register_user(data):
+        if "password" not in data:
+            raise ValueError("Password is required for registration.")
+        password = data.pop("password")
+        account = Account.objects.create_user(**data)
+        account.set_password(password)
+        account.save()
+        return account
+
+
+class ReportController(BaseController):
+    """Controller for Report model"""
+
+    model = Report
 
     @staticmethod
-    def get_by_user(user):
-        """Returns all reports created by user"""
-        return ReportService.filter(reporter_account=user)
+    def get_by_account(account):
+        return Report.objects.filter(account=account, is_deleted=False)
 
     @staticmethod
-    def get_with_tasks():
-        """Returns all reports that have attached tasks"""
-        return ReportService.filter(has_task=True)
-
-    @staticmethod
-    def create(report_data):
-        """
-        Create a new report from a dictionary or another Report object.
-        """
-        if isinstance(report_data, Report):
-            # Convert a model instance to a dictionary, excluding auto fields like id
-            report_data = {
-                field.name: getattr(report_data, field.name)
-                for field in report_data._meta.fields
-                if field.name != "id"
-            }
-        elif not isinstance(report_data, dict):
-            raise ValueError("report_data must be a Report instance or a dictionary.")
-
-        # Create the new Report instance
-        return Report.objects.create(**report_data)
-
-    @staticmethod
-    def update(report_data):
-        """
-        Update the report from a dictionary or another Report object. Find by id
-        """
-        if isinstance(report_data, Report):
-            report_id = report_data.id
-            updated_fields = {
-                field.name: getattr(report_data, field.name)
-                for field in report_data._meta.fields
-                if field.name != "id"
-            }
-        elif isinstance(report_data, dict) and "id" in report_data:
-            report_id = report_data["id"]
-            updated_fields = {k: v for k, v in report_data.items() if k != "id"}
-        else:
-            raise ValueError("report_data must have an 'id' field.")
-
-        # Update the Report instance
-        Report.objects.filter(id=report_id).update(**updated_fields)
-        return Report.objects.get(id=report_id)
-
-    @staticmethod
-    def delete(report_id):
-        """
-        Soft-delete a report by setting is_deleted to True
-        """
-        report = Report.objects.filter(id=report_id).first()
+    def mark_as_with_task(report_id):
+        report = Report.objects.filter(id=report_id, is_deleted=False).first()
         if report:
-            report.is_deleted = True
+            report.has_task = True
             report.save()
         return report
 
 
-class TaskService:
-    """Service over Task model"""
+class TaskController(BaseController):
+    """Controller for Task model"""
 
-    @staticmethod
-    def all():
-        """Returns all tasks"""
-        return Task.objects.filter(is_deleted=False)
-
-    @staticmethod
-    def filter(*args, **kwargs):
-        """Filters tasks based on conditions"""
-        kwargs.setdefault("is_deleted", False)
-        return Task.objects.filter(*args, **kwargs)
+    model = Task
 
     @staticmethod
     def get_by_report(report):
-        """Returns all tasks associated with a specific report"""
-        return TaskService.filter(report=report)
+        return Task.objects.filter(report=report, is_deleted=False)
+
+
+class RequestController(BaseController):
+    """Controller for Request model"""
+
+    model = Request
 
     @staticmethod
-    def create(task_data):
-        """
-        Create a new task from a dictionary or another Task object.
-        """
-        if isinstance(task_data, Task):
-            # Convert a model instance to a dictionary, excluding auto fields like id
-            task_data = {
-                field.name: getattr(task_data, field.name)
-                for field in task_data._meta.fields
-                if field.name != "id"
-            }
-        elif not isinstance(task_data, dict):
-            raise ValueError("task_data must be a Task instance or a dictionary.")
-
-        # Create the new Task instance
-        return Task.objects.create(**task_data)
+    def approve_request(request_id):
+        request = Request.objects.filter(id=request_id, is_deleted=False).first()
+        if request:
+            request.is_approved = True
+            request.save()
+        return request
 
     @staticmethod
-    def update(task_data):
-        """
-        Update the task from a dictionary or another Task object. Find by id
-        """
-        if isinstance(task_data, Task):
-            task_id = task_data.id
-            updated_fields = {
-                field.name: getattr(task_data, field.name)
-                for field in task_data._meta.fields
-                if field.name != "id"
-            }
-        elif isinstance(task_data, dict) and "id" in task_data:
-            task_id = task_data["id"]
-            updated_fields = {k: v for k, v in task_data.items() if k != "id"}
-        else:
-            raise ValueError("task_data must have an 'id' field.")
-
-        # Update the Task instance
-
-        Task.objects.filter(id=task_id).update(**updated_fields)
-        return Task.objects.get(id=task_id)
-
-    @staticmethod
-    def delete(task_id):
-        """
-        Delete a task by id
-        """
-        TaskService.filter(id=task_id).delete()
+    def deny_request(request_id):
+        request = Request.objects.filter(id=request_id, is_deleted=False).first()
+        if request:
+            request.is_approved = False
+            request.save()
+        return request

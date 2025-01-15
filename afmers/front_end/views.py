@@ -5,12 +5,13 @@ from django.contrib.auth.views import LoginView, LogoutView
 from front_end.forms import AccountCreationForm, ReportForm, TaskForm, UpdateTaskForm
 from api.controllers import *
 from api.models import Report, Task
+
 # Create your views here.
 
 
 def home(request):
     reports = Report.objects.all()[::-1][:5]
-    return render(request, "Home.html", {'reports': reports})
+    return render(request, "Home.html", {"reports": reports})
 
 
 def register(request):
@@ -37,7 +38,7 @@ def map(request):
 
 
 def reports(request):
-    context = {"reports": ReportService.all()[::-1]}
+    context = {"reports": ReportController.all()[::-1]}
     return render(request, "reports_main.html", context=context)
 
 
@@ -52,15 +53,16 @@ def create_report(request):
         form = ReportForm()
     return render(request, "Create_Report.html", {"form": form})
 
+
 def create_task(request, pk):
-    request.method = 'POST'
+    request.method = "POST"
     report = get_object_or_404(Report, pk=pk)
     form = TaskForm(request.POST)
     if form.is_valid():
         task = form.save(commit=False)
         task.report = report
         task.save()
-        return redirect('/reports')
+        return redirect("/reports")
     else:
         form = TaskForm()
     return render(request, "Create_Task.html", {"form": form})
@@ -125,4 +127,3 @@ def delete_report(request, pk):
         report.is_deleted = True
         report.save()
         return redirect('/reports')
-

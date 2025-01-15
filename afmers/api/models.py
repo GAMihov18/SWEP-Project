@@ -8,6 +8,38 @@ import json
 # Create your models here.
 
 
+STATUS_OPTIONS = [
+    ("N", "None"),
+    ("I", "Idle"),
+    ("D", "Done"),
+    ("O", "Old"),
+    ("V", "Voided"),
+]
+"""
+N: None
+I: Idle
+D: Done
+O: Old
+V: Voided
+"""
+
+
+AUTHORITY_LEVEL = [
+    ("N", "None"),
+    ("L", "Logged In"),
+    ("E", "Emergency Worker"),
+    ("O", "Organizer"),
+    ("A", "Admin"),
+]
+"""
+N: None
+L: Logged In
+E: Emergency Worker
+O: Organizer
+A: Admin
+"""
+
+
 class BaseModel(models.Model):
     """
     api.models.BaseModel
@@ -45,7 +77,9 @@ class BaseModel(models.Model):
 class Account(AbstractUser, BaseModel):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.CharField(max_length=300, blank=True, null=True)
-    # authority_level
+    authority_level = models.CharField(
+        max_length=1, choices=AUTHORITY_LEVEL, default="N", blank=False
+    )
 
     def __str__(self):
         return self.username
@@ -59,6 +93,7 @@ class Account(AbstractUser, BaseModel):
                 "email": self.email,
                 "phone_number": self.phone_number,
                 "address": self.address,
+                "authority_level": self.authority_level,
             }
         )
         return data
@@ -69,6 +104,7 @@ class Account(AbstractUser, BaseModel):
         data = json.loads(json_data)
         data["phone_number"] = data.get("phone_number", None)
         data["address"] = data.get("address", None)
+        data["authority_level"] = data.get("authority_level", "N")
         return cls(**data)
 
 
@@ -80,21 +116,6 @@ class Account(AbstractUser, BaseModel):
 #     add_fieldsets = UserAdmin.add_fieldsets + (
 #         ("Additional Info", {"fields": ("phone_number", "address")}),
 #     )
-
-STATUS_OPTIONS = [
-    ("N", "None"),
-    ("I", "Idle"),
-    ("D", "Done"),
-    ("O", "Old"),
-    ("V", "Voided"),
-]
-"""
-N: None
-I: Idle
-D: Done
-O: Old
-V: Voided
-"""
 
 
 class Report(BaseModel):
@@ -188,4 +209,33 @@ class Task(BaseModel):
         """Override from_json to parse Task-specific fields."""
         data = json.loads(json_data)
         data["report"] = Report.objects.get(id=data["report"])  # Resolve ForeignKey
+        return cls(**data)
+
+
+class Request(BaseModel):
+    requestee = models.ForeignKey(to=Account, on_delete=models.CASCADE)
+    reasons = models.TextField()
+    requested_level = models.CharField(
+        max_length=1, choices=AUTHORITY_LEVEL, default="N", blank=False
+    )
+    is_approved = models.BooleanField(null=True)
+
+    def __str__(self):
+        return self.requested_level
+
+    def to_json(self):
+        data = super().to_json()
+        data.update(
+            {
+                "requestee": str(self.requestee.id),
+                "reasons": self.reasons,
+                "requested_level": self.requested_level,
+            }
+        )
+        return data
+
+    @classmethod
+    def from_json(cls, json_data):
+        data = json.loads(json_data)
+        data["requestee"] = Account.objects.get(id=data["requestee"])
         return cls(**data)

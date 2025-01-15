@@ -36,7 +36,8 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = ("title",
-                  "description"
+                  "description",
+                  "address"
                   )
         widgets = {
             "description": forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 300px;'}),
@@ -46,6 +47,7 @@ class ReportForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["title"].widget.attrs.update({"placeholder": "Enter a title"})
         self.fields["description"].widget.attrs.update({"placeholder": "Description"})
+        self.fields["address"].widget.attrs.update({"placeholder": "example: Getreidegasse 9, 5020 Salzburg, Austria"})
 
 class TaskForm(forms.ModelForm):
     class Meta:

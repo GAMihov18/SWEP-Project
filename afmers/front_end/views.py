@@ -5,9 +5,23 @@ from django.contrib.auth.views import LoginView, LogoutView
 from front_end.forms import AccountCreationForm, ReportForm, TaskForm, UpdateTaskForm
 from api.controllers import *
 from api.models import Report, Task
-
+import requests
 # Create your views here.
 
+
+def geocode_address(address):
+    url = f"https://nominatim.openstreetmap.org/search"
+    params = {"q": address, "format": "json"}
+    headers = {
+        "User-Agent": "afmers/1.0 (23IMC11181@imc.ac.at)"
+    }
+    response = requests.get(url, params=params, headers=headers)
+    print(response)
+    if response.status_code == 200:
+        results = response.json()
+        if results:
+            return float(results[0]["lat"]), float(results[0]["lon"])
+    return None, None
 
 def home(request):
     reports = Report.objects.all()[::-1][:5]
@@ -47,6 +61,10 @@ def create_report(request):
     if form.is_valid():
         report = form.save(commit=False)
         report.account = request.user
+        lat, lng = geocode_address(report.address)
+        if lat and lng:
+            report.latitude = lat
+            report.longitude = lng
         report.save()
         return redirect("/")
     else:

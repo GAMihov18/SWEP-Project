@@ -139,6 +139,9 @@ class Report(BaseModel):
         max_length=1, choices=STATUS_OPTIONS, default="N", blank=False
     )
     has_task = models.BooleanField(default=False)
+    address = models.CharField(max_length=255, blank=False, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
 
     def __str__(self):
         return self.title

@@ -26,7 +26,10 @@
                                 <p class="card-text">
                                     <strong>Reporter:</strong> {{ report.account.username }}<br>
                                     <strong>Date Reported:</strong> {{ report.date_reported }}<br>
-                                    <strong>Description:</strong> {{ report.description }}
+                                    <strong>Description:</strong> {{ report.description }}<br>
+                                    {% if report.address %}
+                                        <strong>Address:</strong> {{ report.address }}
+                                    {% endif %}
                                 </p>
                                 {% if user.authority_level == "O" %}
                                 <a href="{% url 'create_task-page' report.id %}"><button class="btn btn-dark" type="submit">Add a Task</button></a>

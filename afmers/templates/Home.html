@@ -37,8 +37,9 @@
                     <div class="card-body">
                         {% if news %}
                             {% for info in news %}
-                                <div class="news-item">
+                                <div class="card reports-item mb-2 px-2">
                                     <h5>{{ info.title }}</h5>
+                                    <samp class="text-secondary"> {{ info.date }}</samp>
                                     <p>{{ info.description }}</p>
                                 </div>
                             {% endfor %}

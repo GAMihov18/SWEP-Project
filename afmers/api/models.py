@@ -242,3 +242,57 @@ class Request(BaseModel):
         data = json.loads(json_data)
         data["requestee"] = Account.objects.get(id=data["requestee"])
         return cls(**data)
+
+
+class News(BaseModel):
+    """
+    api.models.Report(BaseModel)
+        account -> ForeignKey
+        title -> CharField
+        descirption -> CharField
+        date -> DateField
+        time -> TimeField
+        status -> CharField
+    """
+
+    account = models.ForeignKey("api.Account", on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, blank=False)
+    description = models.CharField(max_length=300, blank=True)
+    date = models.DateField(blank=False, default=now)
+    time = models.TimeField(blank=True, null=True)
+    status = models.CharField(
+        max_length=1, choices=STATUS_OPTIONS, default="N", blank=False
+    )
+    address = models.CharField(max_length=255, blank=True, null=True, default=None)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    def to_json(self):
+        """Override to_json to include custom fields for Report."""
+        data = super().to_json()
+        data.update(
+            {
+                "account": str(self.account_id.id),
+                "title": self.title,
+                "description": self.description,
+                "date": str(self.date),
+                "time_reported": (
+                    str(self.time) if self.time else None
+                ),
+                "status": self.status,
+            }
+        )
+        return data
+
+    @classmethod
+    def from_json(cls, json_data):
+        """Override from_json to parse Report-specific fields."""
+        data = json.loads(json_data)
+        data["account"] = Account.objects.get(
+            id=data["account"]
+        )  # Ensure we resolve the ForeignKey
+        data["date"] = data.get("date", None)
+        return cls(**data)

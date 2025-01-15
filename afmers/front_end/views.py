@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from front_end.forms import AccountCreationForm, ReportForm, TaskForm, UpdateTaskForm
+from front_end.forms import AccountCreationForm, ReportForm, TaskForm, UpdateTaskForm, NewsForm
 from api.controllers import *
-from api.models import Report, Task
+from api.models import Report, Task, News
 import requests
 # Create your views here.
 
@@ -25,7 +25,8 @@ def geocode_address(address):
 
 def home(request):
     reports = Report.objects.all()[::-1][:5]
-    return render(request, "Home.html", {"reports": reports})
+    news = News.objects.all()[::-1][:5]
+    return render(request, "Home.html", {"reports": reports, "news": news})
 
 
 def register(request):
@@ -146,3 +147,16 @@ def delete_report(request, pk):
         report.is_deleted = True
         report.save()
         return redirect('/reports')
+
+def create_news(request):
+    form = NewsForm(request.POST)
+    if form.is_valid():
+        news = form.save(commit=False)
+        news.account = request.user
+        news.save()
+        return redirect("/")
+    else:
+        form = NewsForm()
+    return render(request, 'Create_News.html', {'form': form})
+
+

@@ -41,5 +41,6 @@ urlpatterns = [
     path("delete_task/<uuid:pk>", fe.delete_task, name='delete_task-page'),
     path("delete_report/<uuid:pk>", fe.delete_report, name='delete_report-page'),
     path("update_task/<uuid:pk>", fe.update_task, name="update_task-page"),
-    path("update_report/<uuid:pk>", fe.update_report, name="update_report-page")
+    path("update_report/<uuid:pk>", fe.update_report, name="update_report-page"),
+    path("create_news/", fe.create_news, name="create_news-page")
 ]

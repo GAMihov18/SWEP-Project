@@ -32,6 +32,11 @@
             <a class="nav-link" href="{% url 'assigned_task-page' user.username %}">See assigned tasks</a>
           </li>
           {% endif %}
+          {% if user.authority_level == "O" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_news-page'%}">Post News</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="#" onclick="document.getElementById('logout-modal').style.display='block'; return false;">Logout</a>
           </li>

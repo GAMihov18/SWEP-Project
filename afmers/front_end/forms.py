@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from api.models import Account, Report, Task
+from api.models import Account, Report, Task, News
 
 
 class AccountCreationForm(UserCreationForm):
@@ -76,3 +76,21 @@ class UpdateTaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ('status',)
+
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = News
+        fields = ("title",
+                  "description",
+                  "address"
+                  )
+        widgets = {
+            "description": forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 300px;'}),
+            "address": forms.TextInput(attrs={'required': 'false'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["title"].widget.attrs.update({"placeholder": "Enter a title"})
+        self.fields["description"].widget.attrs.update({"placeholder": "Description"})
+        self.fields["address"].widget.attrs.update({"placeholder": "example: Getreidegasse 9, 5020 Salzburg, Austria"})
